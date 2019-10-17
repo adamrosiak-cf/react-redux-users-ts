@@ -1,0 +1,49 @@
+.btn-width {
+  min-width: 80px;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.gone {
+  position: absolute;
+  margin: 0;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  color: red;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.display-none {
+  display: none;
+}
+
+.modal-dialog {
+  margin: auto !important;
+}
+
+.modal-body {
+  text-align: center;
+}
+
+.sort {
+  position: relative;
+  top: -2px;
+  left: 2px;
+  transition: transform 0.2s ease;
+  &.sortUp {
+    transform-origin: center;
+    transform: rotateZ(180deg);
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}

@@ -1,26 +1,80 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.scss";
+import { List } from "./components/List";
+import { AddEditUser } from "./components/AddEditUser";
+import { connect } from "react-redux";
+import {
+  User,
+  getUsers,
+  deleteUser,
+  editUser,
+  addUser,
+  changeTab
+} from "./redux/actions";
+import { StoreState } from "./redux/reducers";
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface AppProps {
+  users: User[];
+  tabName: string;
+  getUsers: Function;
+  deleteUser: Function;
+  addUser: Function;
+  editUser: Function;
+  changeTab: Function;
 }
 
-export default App;
+interface AppState {
+  userToBeEdited: {
+    id: number;
+    name: string;
+    email: string;
+  };
+}
+
+class _App extends React.Component<AppProps, AppState> {
+  constructor(props: AppProps) {
+    super(props);
+
+    this.state = {
+      userToBeEdited: {
+        id: 0,
+        name: "",
+        email: ""
+      }
+    };
+  }
+
+  setUserToBeEdited = (id: number, name: string, email: string): void => {
+    this.setState({ userToBeEdited: { id, name, email } });
+  };
+
+  componentDidMount() {
+    this.props.getUsers();
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <header className="row my-5">
+          <div className="col">
+            <h2 className="text-left">Dashboard</h2>
+          </div>
+        </header>
+        {this.props.tabName === "usersList" ? (
+          <List setUserToBeEdited={this.setUserToBeEdited} />
+        ) : (
+          <AddEditUser userToBeEdited={this.state.userToBeEdited} />
+        )}
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state: StoreState) => {
+  return { users: state.users, tabName: state.tabName };
+};
+
+export const App = connect(
+  mapStateToProps,
+  { getUsers, deleteUser, editUser, addUser, changeTab }
+)(_App);
